@@ -10,11 +10,41 @@
         .item form {
             margin-right: 1em;
         }
+        #tag_filter_list {
+            position: absolute;
+            background: white;
+            list-style: none;
+            padding: 0;
+            display: none;
+        }
+        #tag_filter_list li {
+            padding: 1em;
+            border: 1px solid #ccc;
+        }
     </style>
     <script>
         function deleteThing(id) {
             fetch('/delete/' + id, { method: 'POST' })
                 .then(response => location.reload());
+        }
+        function updateTagFilterList() {
+            const input = document.getElementById('tag_filter');
+            const list = document.getElementById('tag_filter_list');
+            fetch('/tags?query=' + encodeURIComponent(input.value))
+                .then(response => response.json())
+                .then(tags => {
+                    list.innerHTML = '';
+                    for (const tag of tags) {
+                        const li = document.createElement('li');
+                        li.textContent = tag;
+                        li.addEventListener('click', () => {
+                            input.value = tag;
+                            list.style.display = 'none';
+                        });
+                        list.appendChild(li);
+                    }
+                    list.style.display = 'block';
+                });
         }
     </script>
 </head>
@@ -22,7 +52,13 @@
     <h1>Things</h1>
     <form action="/" method="post">
         <input type="text" name="thing_name" required>
+        <input type="text" name="thing_tags" placeholder="Enter tags, separated by commas">
         <input type="submit" value="Add Thing">
+    </form>
+    <form action="/" method="get">
+        <input type="text" id="tag_filter" name="tag_filter" placeholder="Filter by tag" oninput="updateTagFilterList()">
+        <ul id="tag_filter_list"></ul>
+        <input type="submit" value="Filter">
     </form>
     <form action="/bulk_delete" method="post">
         <ul>
@@ -31,6 +67,7 @@
                 <input type="checkbox" name="ids" value="{{ thing.id }}">
                 <button type="button" onclick="deleteThing({{ thing.id }})">Delete</button>
                 {{ thing.name }} ({{ thing.date_added.strftime('%Y-%m-%d %H:%M:%S') }})
+                Tags: {% for tag in thing.tags %}<a href="/?tag_filter={{ tag.name }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
             </li>
         {% endfor %}
         </ul>
