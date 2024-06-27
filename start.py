@@ -30,6 +30,14 @@ def delete(id):
         db.session.commit()
     return redirect(url_for('index'))
 
+@app.route('/bulk_delete', methods=['POST'])
+def bulk_delete():
+    ids_to_delete = request.form.getlist('ids')
+    ids_to_delete = [int(id) for id in ids_to_delete]  # Convert IDs to integers
+    Thing.query.filter(Thing.id.in_(ids_to_delete)).delete(synchronize_session=False)
+    db.session.commit()
+    return redirect(url_for('index'))
+
 with app.app_context():
     db.create_all()
 

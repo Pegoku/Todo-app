@@ -11,6 +11,12 @@
             margin-right: 1em;
         }
     </style>
+    <script>
+        function deleteThing(id) {
+            fetch('/delete/' + id, { method: 'POST' })
+                .then(response => location.reload());
+        }
+    </script>
 </head>
 <body>
     <h1>Things</h1>
@@ -18,15 +24,17 @@
         <input type="text" name="thing_name" required>
         <input type="submit" value="Add Thing">
     </form>
-    <ul>
-    {% for thing in things %}
-        <li class="item">
-            <form action="/delete/{{ thing.id }}" method="post">
-                <input type="submit" value="Delete">
-            </form>
-            {{ thing.name }} ({{ thing.date_added.strftime('%Y-%m-%d %H:%M:%S') }})
-        </li>
-    {% endfor %}
-    </ul>
+    <form action="/bulk_delete" method="post">
+        <ul>
+        {% for thing in things %}
+            <li class="item">
+                <input type="checkbox" name="ids" value="{{ thing.id }}">
+                <button type="button" onclick="deleteThing({{ thing.id }})">Delete</button>
+                {{ thing.name }} ({{ thing.date_added.strftime('%Y-%m-%d %H:%M:%S') }})
+            </li>
+        {% endfor %}
+        </ul>
+        <input type="submit" value="Delete Selected">
+    </form>
 </body>
 </html>
