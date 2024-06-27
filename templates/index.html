@@ -2,6 +2,15 @@
 <html>
 <head>
     <title>Things</title>
+    <style>
+        .item {
+            display: flex;
+            align-items: center;
+        }
+        .item form {
+            margin-right: 1em;
+        }
+    </style>
 </head>
 <body>
     <h1>Things</h1>
@@ -11,7 +20,12 @@
     </form>
     <ul>
     {% for thing in things %}
-        <li>{{ thing.name }}</li>
+        <li class="item">
+            <form action="/delete/{{ thing.id }}" method="post">
+                <input type="submit" value="Delete">
+            </form>
+            {{ thing.name }}
+        </li>
     {% endfor %}
     </ul>
 </body>

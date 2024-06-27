@@ -20,6 +20,14 @@ def index():
     things = Thing.query.all()
     return render_template('index.html', things=things)
 
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete(id):
+    thing = Thing.query.get(id)
+    if thing:
+        db.session.delete(thing)
+        db.session.commit()
+    return redirect(url_for('index'))
+
 with app.app_context():
     db.create_all()
 
