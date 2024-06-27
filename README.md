@@ -1,6 +1,6 @@
 # Todo-app
 
-This is a simple Todo application built with Flask and SQLAlchemy. It allows users to create, read, update, and delete "Things". Each "Thing" has a name and a list of tags(optional).
+This is a simple Todo application built with Flask and SQLAlchemy. It allows users to create, read, and delete "Things". Each "Thing" has a name and a list of tags(optional).
 
 ## Features
 
