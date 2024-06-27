@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
@@ -8,6 +9,7 @@ db = SQLAlchemy(app)
 class Thing(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True)
+    date_added = db.Column(db.DateTime, default=datetime.utcnow)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():

@@ -24,7 +24,7 @@
             <form action="/delete/{{ thing.id }}" method="post">
                 <input type="submit" value="Delete">
             </form>
-            {{ thing.name }}
+            {{ thing.name }} ({{ thing.date_added.strftime('%Y-%m-%d %H:%M:%S') }})
         </li>
     {% endfor %}
     </ul>
