@@ -11,7 +11,11 @@ db = SQLAlchemy(app)
 @app.route('/tags', methods=['GET'])
 def tags():
     query = request.args.get('query')
-    tags = Tag.query.filter(Tag.name.like(f'{query}%')).all()
+
+    if query:
+        tags = Tag.query.filter(Tag.name.like(f'{query}%')).all()
+    else:
+        tags = ""
     return jsonify([tag.name for tag in tags])
 
 tags = db.Table('tags',
@@ -62,6 +66,9 @@ def bulk_delete():
     Thing.query.filter(Thing.id.in_(ids_to_delete)).delete(synchronize_session=False)
     db.session.commit()
     return redirect(url_for('index'))
+
+
+
 
 with app.app_context():
     db.create_all()
