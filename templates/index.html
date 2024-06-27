@@ -27,25 +27,6 @@
             fetch('/delete/' + id, { method: 'POST' })
                 .then(response => location.reload());
         }
-        function updateTagFilterList() {
-            const input = document.getElementById('tag_filter');
-            const list = document.getElementById('tag_filter_list');
-            fetch('/tags?query=' + encodeURIComponent(input.value))
-                .then(response => response.json())
-                .then(tags => {
-                    list.innerHTML = '';
-                    for (const tag of tags) {
-                        const li = document.createElement('li');
-                        li.textContent = tag;
-                        li.addEventListener('click', () => {
-                            input.value = tag;
-                            list.style.display = 'none';
-                        });
-                        list.appendChild(li);
-                    }
-                    list.style.display = 'block';
-                });
-            }
         function updateDeleteSelectedButton() {
             const checkboxes = document.querySelectorAll('input[name="ids"]');
             const button = document.getElementById('delete_selected');
@@ -78,12 +59,12 @@
             <li class="item">
                 <input type="checkbox" name="ids" value="{{ thing.id }}" onchange="updateDeleteSelectedButton()">
                 <button type="button" onclick="deleteThing({{ thing.id }})">Delete</button> 
-                {{ thing.name }} ({{ thing.date_added.strftime('%d-%m-%y %H:%M:%S') }})
+                {{ thing.name }} ({{ thing.date_added.strftime('%Y-%m-%d %H:%M:%S') }})
                 Tags: {% for tag in thing.tags %}<a href="/?tag_filter={{ tag.name }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
             </li>
         {% endfor %}
         </ul>
-        <input type="submit" id="delete_selected" value="Delete Selected">
+        <input type="submit" id ="delete_selected" value="Delete Selected">
     </form>
 </body>
 </html>

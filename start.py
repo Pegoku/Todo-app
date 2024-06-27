@@ -8,6 +8,12 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 db = SQLAlchemy(app)
 
+@app.route('/tags', methods=['GET'])
+def tags():
+    query = request.args.get('query')
+    tags = Tag.query.filter(Tag.name.like(f'{query}%')).all()
+    return jsonify([tag.name for tag in tags])
+
 tags = db.Table('tags',
     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'), primary_key=True),
     db.Column('thing_id', db.Integer, db.ForeignKey('thing.id'), primary_key=True)
@@ -56,14 +62,6 @@ def bulk_delete():
     Thing.query.filter(Thing.id.in_(ids_to_delete)).delete(synchronize_session=False)
     db.session.commit()
     return redirect(url_for('index'))
-
-
-@app.route('/tags', methods=['GET'])
-def tags():
-    query = request.args.get('query')
-    tags = Tag.query.filter(Tag.name.like(f'{query}%')).all()
-    return jsonify([tag.name for tag in tags])
-
 
 with app.app_context():
     db.create_all()
