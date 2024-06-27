@@ -1,6 +1,7 @@
 # Todo-app
 
 This is a simple Todo application built with Flask and SQLAlchemy. It allows users to create, read, and delete "Things". Each "Thing" has a name and a list of tags(optional).
+![Todo-app](https://raw.githubusercontent.com/Pegoku/Todo-app/main/img/image.png)
 
 ## Features
 
