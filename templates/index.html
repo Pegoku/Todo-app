@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Todo</title>
+    <title>Things</title>
 </head>
 <body>
-    <h1>List</h1>
+    <h1>Things</h1>
+    <form action="/" method="post">
+        <input type="text" name="thing_name" required>
+        <input type="submit" value="Add Thing">
+    </form>
     <ul>
-    {% for things in things %}
-        <li>{{ things.name }}</li>
+    {% for thing in things %}
+        <li>{{ thing.name }}</li>
     {% endfor %}
     </ul>
 </body>
