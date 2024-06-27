@@ -78,7 +78,7 @@
             <li class="item">
                 <input type="checkbox" name="ids" value="{{ thing.id }}" onchange="updateDeleteSelectedButton()">
                 <button type="button" onclick="deleteThing({{ thing.id }})">Delete</button> 
-                {{ thing.name }} ({{ thing.date_added.strftime('%Y-%m-%d %H:%M:%S') }})
+                {{ thing.name }} ({{ thing.date_added.strftime('%d-%m-%y %H:%M:%S') }})
                 Tags: {% for tag in thing.tags %}<a href="/?tag_filter={{ tag.name }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
             </li>
         {% endfor %}
