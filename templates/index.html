@@ -45,7 +45,19 @@
                     }
                     list.style.display = 'block';
                 });
+            }
+        function updateDeleteSelectedButton() {
+            const checkboxes = document.querySelectorAll('input[name="ids"]');
+            const button = document.getElementById('delete_selected');
+            button.style.display = Array.from(checkboxes).some(checkbox => checkbox.checked) ? 'inline' : 'none';
         }
+        window.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('input[name="ids"]');
+            for (const checkbox of checkboxes) {
+                checkbox.addEventListener('change', updateDeleteSelectedButton);
+            }
+            updateDeleteSelectedButton();
+        });
     </script>
 </head>
 <body>
@@ -64,14 +76,14 @@
         <ul>
         {% for thing in things %}
             <li class="item">
-                <input type="checkbox" name="ids" value="{{ thing.id }}">
-                <button type="button" onclick="deleteThing({{ thing.id }})">Delete</button>
+                <input type="checkbox" name="ids" value="{{ thing.id }}" onchange="updateDeleteSelectedButton()">
+                <button type="button" onclick="deleteThing({{ thing.id }})">Delete</button> 
                 {{ thing.name }} ({{ thing.date_added.strftime('%Y-%m-%d %H:%M:%S') }})
                 Tags: {% for tag in thing.tags %}<a href="/?tag_filter={{ tag.name }}">{{ tag.name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}
             </li>
         {% endfor %}
         </ul>
-        <input type="submit" value="Delete Selected">
+        <input type="submit" id="delete_selected" value="Delete Selected">
     </form>
 </body>
 </html>
